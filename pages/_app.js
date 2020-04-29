@@ -1,6 +1,6 @@
 import App from "next/app";
 import Layout from "../components/_App/Layout";
-import { parseCookies } from "nookies";
+import { parseCookies, destroyCookie } from "nookies";
 import { redirectUser } from "../utils/auth";
 import baseUrl from "../utils/baseUrl";
 import axios from "axios";
@@ -30,6 +30,10 @@ class MyApp extends App {
         pageProps.user = user;
       } catch (error) {
         console.error("Error getting current user", error);
+        //THROW OUT INVALID TOKEN
+        destroyCookie(ctx, "token")
+        //REDIRECT TO LOGIN
+        redirectUser(ctx, "/login")
       }
     }
 
