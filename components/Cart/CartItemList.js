@@ -1,31 +1,32 @@
 import {Header, Segment, Button, Icon, Item} from 'semantic-ui-react'
 import {useRouter} from 'next/router'
 
+function CartItemList({ products, user, handleRemoveFromCart }) {
+  const router = useRouter();
 
-function CartItemList({products, user, handleRemoveFromCart}) {
-  const router = useRouter()
-
-  function mapCartProductsToItems(products){
-    return products.map(p =>({
+  function mapCartProductsToItems(products) {
+    return products.map(p => ({
       childKey: p.product._id,
       header: (
-        <Item.Header as="a" onClick={() => router.push(`
-        /product?_id = ${p.product._id}` )}>
+        <Item.Header
+          as="a"
+          onClick={() => router.push(`/product?_id=${p.product._id}`)}
+        >
           {p.product.name}
         </Item.Header>
       ),
       image: p.product.mediaUrl,
-      meta: `${p.quantity} x Ksh${p.product.price}`,
+      meta: `${p.quantity} x $${p.product.price}`,
       fluid: "true",
       extra: (
-        <Button 
-        basic
-        icon="remove"
-        floated="left"
-        onClick={() => handleRemoveFromCart(p.product._id)}
+        <Button
+          basic
+          icon="remove"
+          floated="right"
+          onClick={() => handleRemoveFromCart(p.product._id)}
         />
       )
-    }))
+    }));
   }
 
 if(products.length === 0){
