@@ -1,7 +1,14 @@
-import {Header, Segment, Button, Icon, Item} from 'semantic-ui-react'
-import {useRouter} from 'next/router'
+import {
+  Header,
+  Segment,
+  Button,
+  Icon,
+  Item,
+  Message
+} from "semantic-ui-react";
+import { useRouter } from "next/router";
 
-function CartItemList({ products, user, handleRemoveFromCart }) {
+function CartItemList({ products, user, handleRemoveFromCart, success }) {
   const router = useRouter();
 
   function mapCartProductsToItems(products) {
@@ -29,22 +36,40 @@ function CartItemList({ products, user, handleRemoveFromCart }) {
     }));
   }
 
-if(products.length === 0){
-  return (
-    <Segment secondary color="yellow" inverted textAlign="center" placeholder>
-      <Header icon>
-      <Icon name="shopping basket"/>
-      No Items in your cart. Add some?
-      </Header>
-      <div>
-        {user ?(<Button color="blue" onClick={() =>router.push('/')}>View My Products</Button>):
-        (<Button color="grey"onClick={() =>router.push('/login')}>Login to shop</Button>)}
-      </div>
+  if (success) {
+    return (
+      <Message
+        success
+        header="Success!"
+        content="Your order and payment has been accepted"
+        icon="star outline"
+      />
+    );
+  }
 
-    </Segment>
-  );
-}
-return <Item.Group divided items={mapCartProductsToItems(products)} />
+  if (products.length === 0) {
+    return (
+      <Segment secondary color="teal" inverted textAlign="center" placeholder>
+        <Header icon>
+          <Icon name="shopping basket" />
+          No products in your cart. Add some!
+        </Header>
+        <div>
+          {user ? (
+            <Button color="orange" onClick={() => router.push("/")}>
+              View Products
+            </Button>
+          ) : (
+            <Button color="blue" onClick={() => router.push("/login")}>
+              Login to Add Products
+            </Button>
+          )}
+        </div>
+      </Segment>
+    );
+  }
+
+  return <Item.Group divided items={mapCartProductsToItems(products)} />;
 }
 
 export default CartItemList;
